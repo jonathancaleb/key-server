@@ -9,6 +9,9 @@
     "start:dev": "nodemon app.js",
     "start:prod": "pm2 start app.js --name key-server"
   },
+  "engines": {
+    "node": ">=16.20.1"
+  },
   "jest": {
     "testEnvironment": "node",
     "testMatch": [
