@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Purchase Key Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(to bottom, #a18cd1, #fbc2eb);
+            text-align: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        h1 {
+            margin-bottom: 20px;
+        }
+        
+        h2 {
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+
+        #generateKey {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            margin-bottom: 10px;
+            background-color: #0074c8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        #copyKey {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #ddd;
+            border: none;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+
+        #keyContainer {
+            margin-top: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        #displayKey {
+            width: 300px;
+            height: 50px;
+            font-size: 20px;
+            padding: 10px;
+            margin-top: 20px;
+            border: 2px solid #555;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            outline: none;
+        }
+
+        #description {
+            margin-top: 40px;
+            font-size: 14px;
+        }
+
+        #description a {
+            color: #333;
+            text-decoration: underline;
+        }
+        #alertMessage {
+            display: none;
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 10px 20px;
+            font-size: 14px;
+            background-color: #f44336;
+            color: white;
+            border-radius: 5px;
+            z-index: 9999;
+        }
+    </style>
+</head>
+<body>
+    <h1>Purchase Key Generator</h1>
+    <div id="keyContainer">
+        <button id="generateKey">Generate Purchase Key</button>
+        <div>
+            <h2>Generated Key:</h2>
+            <input type="text" id="displayKey" readonly>
+            <button id="copyKey">Copy Key</button>
+        </div>
+    </div>
+    
+    <div id="description">
+        <p>Want to check the code? Find it on <a href="https://github.com/yourusername" target="_blank">GitHub</a>.</p>
+        <p>Deployed on <a href="https://aws.amazon.com/" target="_blank">AWS</a>.</p>
+    </div>
+
+    <div id="alertMessage"></div>
+
+    <script>
+        document.getElementById('generateKey').addEventListener('click', async () => {
+            try {
+                const response = await fetch('/license/generate');
+                const data = await response.json();
+                document.getElementById('displayKey').value = data.purchaseKey;
+            } catch (error) {
+                console.error(error);
+            }
+        });
+
+        document.getElementById('copyKey').addEventListener('click', () => {
+            const displayKey = document.getElementById('displayKey');
+            displayKey.select();
+            document.execCommand('copy');
+
+            // Show alert message
+            const alertMessage = document.getElementById('alertMessage');
+            alertMessage.textContent = 'Key copied to clipboard';
+            alertMessage.style.display = 'block';
+
+            // Clear alert after 10 seconds
+            setTimeout(() => {
+                alertMessage.textContent = '';
+                alertMessage.style.display = 'none';
+            }, 10000);
+        });
+
+        // Clear key box on page load
+        window.addEventListener('load', () => {
+            document.getElementById('displayKey').value = '';
+        });
+    </script>
+</body>
+</html>
