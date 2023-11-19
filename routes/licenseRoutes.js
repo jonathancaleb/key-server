@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const License = require('../models/License');
 
+
 function generatePurchaseKey() {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     const keyLength = 12;
